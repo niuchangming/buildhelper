@@ -3,7 +3,7 @@
 
 @(projects: List[Project], pageIndex: Integer, totalAmount: Integer)
 
-@sidemenu("engineer", 5){
+@sidemenu("engineer", 8){
 	<link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/froala/font-awesome.min.css")">
 	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/simplePagination.css")">
 	<script src="@routes.Assets.versioned("javascripts/jquery.simplePagination.js")" type="text/javascript"></script>
@@ -27,56 +27,6 @@
 		            $('form#page-form').submit();
 		        }
 		    });
-		    
-		    $('.archive-action').on('click', function(){
-		    		var projectId = $(this).data('id');
-		    		var url = $(this).data('url');
-		    		
-		    		if(!$(this).hasClass('disabled')){
-		    			$(this).addClass("disabled");
-		    			$.ajax({
-		                url: url,
-		                type: "POST",
-		                data: {
-		                		projectId: projectId
-		                },
-		                success: function(response, status) {
-			                	var data = $.parseJSON(JSON.stringify(response));
-			                	if(data.code != 0){
-			                		showAlertToast(data.message, "alert-danger");
-			                	}else{
-			                		window.location.href = "@routes.ProjectController.projectOfEngineer(0)";
-			                	}
-			                	$(this).removeClass("disabled");
-			            }
-		            });		    			
-		    		}
-		    });
-		    
-		    $('.complete-action').on('click', function(){
-		    		var projectId = $(this).data('id');
-		    		var url = $(this).data('url');
-		    		
-		    		if(!$(this).hasClass('disabled')){
-		    			$(this).addClass("disabled");
-		    			$.ajax({
-		                url: url,
-		                type: "POST",
-		                data: {
-		                		projectId: projectId
-		                },
-		                success: function(response, status) {
-			                	var data = $.parseJSON(JSON.stringify(response));
-			                	if(data.code != 0){
-			                		showAlertToast(data.message, "alert-danger");
-			                	}else{
-			                		window.location.href = "@routes.ProjectController.projectOfEngineer(0)";
-			                	}
-			                	$(this).removeClass("disabled");
-			            }
-		            });		    			
-		    		}
-		    });
 	   	});
 	</script>
 	<div class="dash-detail-header">
@@ -93,9 +43,7 @@
 			      <tr>
 			        <th>S/N</th>
 			        <th>Project Title</th>
-			        <th>Project Type</th>
-			        <th>Starting Date</th>
-			        <th>Ending Date</th>
+			        <th>Type of Work</th>
 			        <th>Action</th>
 			      </tr>
 			    </thead>
@@ -119,15 +67,9 @@
 								}
 							</td>
 							<td>
-								@projects(index).startDate
-							</td>
-							<td>
-								@projects(index).endDate
-							</td>
-							<td>
-								<a class="edit-action action-btn" href="@routes.ProjectController.createProject(projects(index).id)">Edit</a>
-								<a class="archive-action action-btn" data-id="@projects(index).id" data-url="@routes.ProjectController.archiveProject()">Archive</a>
-								<a class="complete-action action-btn" data-id="@projects(index).id" data-url="@routes.ProjectController.projectCompleted()">Complete</a>
+								<a class="upload-action action-btn" href="@routes.ProjectController.drawingFile(projects(index).id)">Upload Drawing/Calculations</a>
+								<a class="request-action action-btn" href="@routes.COSController.createCOS(projects(index).id)">Request for COS</a>
+								<a class="view-action action-btn">View COS</a>
 							</td>
 				        </tr>
 					}
@@ -142,9 +84,3 @@
 		</div>	
 	}
 }
-
-
-
-
-
-

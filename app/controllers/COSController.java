@@ -18,6 +18,7 @@ import models.AccountType;
 import models.COS;
 import models.COSImage;
 import models.COSTerm;
+import models.Client;
 import models.Engineer;
 import models.LetterHead;
 import models.Project;
@@ -28,6 +29,7 @@ import models.TermType;
 import play.Application;
 import play.data.DynamicForm;
 import play.data.FormFactory;
+import play.db.jpa.JPA;
 import play.db.jpa.JPAApi;
 import play.db.jpa.Transactional;
 import play.libs.Json;
@@ -43,7 +45,6 @@ import views.html.*;
 public class COSController extends Controller{
 	@Inject private FormFactory formFactory;
 	@Inject private JPAApi jpaApi;
-	@Inject private Provider<Application> application;
 	
 	@With(AuthAction.class)
 	@Transactional
@@ -81,7 +82,6 @@ public class COSController extends Controller{
 						inspectors.add(acc);
 					}
 				}
-				
 				
 				return ok(requestcos.render(project, locations, terms, qpList, inspectors));
 			}else {
@@ -206,6 +206,42 @@ public class COSController extends Controller{
 							}
 						}
 					}
+					
+					//Start add route member
+					Iterator<String> iterator = requestData.data().keySet().iterator();
+					List<String> routeAccounts = new ArrayList<>();
+				    
+				    String key;
+				    while(iterator.hasNext()){
+					    	key = iterator.next();
+					    	if(key.contains("qp")){
+					    		String qpAcc = requestData.data().get(key);
+					    		if(!Utils.isBlank(qpAcc)) {
+					    			routeAccounts.add(qpAcc);
+					    		}
+					    	}
+					    	
+					    	if(key.contains("inspector")){
+					    		String inspectorAcc = requestData.data().get(key);
+					    		if(!Utils.isBlank(inspectorAcc)) {
+					    			routeAccounts.add(inspectorAcc);
+					    		}
+					    	}
+				    }
+				    
+				    String routeWhereCause = "";
+				    for(String qpAcc : routeAccounts){
+				    		routeWhereCause	 += "ac.id=" + qpAcc + " or ";
+				    }
+					if(routeWhereCause.length() > 4) {
+						routeWhereCause = routeWhereCause.substring(0, routeWhereCause.length() - 4);
+					}
+					
+					List<Account> accountList = jpaApi.em().createNativeQuery("SELECT * FROM account ac WHERE " + routeWhereCause, Account.class).getResultList();
+					for(Account a : accountList) {
+						a.cos = cos;
+						jpaApi.em().persist(a);
+					}
 				}catch (IOException e) {
 					responseData.code = 4001;
 					responseData.message = e.getMessage();
@@ -217,6 +253,23 @@ public class COSController extends Controller{
 		}
 		
 		return ok(Json.toJson(responseData));
+	}
+	
+	@With(AuthAction.class)
+	@Transactional
+	public Result viewCOS() {
+		ResponseData responseData = new ResponseData();
+		
+		Account account = (Account) ctx().args.get("account");
+		Engineer engineer = jpaApi.em().find(Engineer.class, account.id);
+		if (engineer == null) {
+			responseData.code = 4000;
+			responseData.message = "You do not have permission.";
+		}else{
+			
+		}
+		
+		return notFound(errorpage.render(responseData));
 	}
 }
 
