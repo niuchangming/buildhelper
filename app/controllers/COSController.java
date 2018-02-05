@@ -789,6 +789,32 @@ public class COSController extends Controller{
 		
 		return notFound(errorpage.render(responseData));
 	}
+	
+	@With(AuthAction.class)
+	@Transactional
+	public Result deleteCOSImage(String uuid) {
+		ResponseData responseData = new ResponseData();
+		
+		long accountId = ((Account) ctx().args.get("account")).id;
+		Account account = jpaApi.em().find(Account.class, accountId);
+		if(account == null) {
+			responseData.code = 4000;
+			responseData.message = "Account doesn't exist.";
+		}else {
+			COSImage cosImage = jpaApi.em()
+					.createQuery("FROM COSImage cim WHERE cim.uuid=:uuid", COSImage.class)
+					.setParameter("uuid", uuid)
+					.getSingleResult();
+			cosImage.issue = null;
+			cosImage.inspection = null;
+			cosImage.cos = null;
+			cosImage.deleteThumbnail();
+			cosImage.delete();
+			jpaApi.em().remove(cosImage);
+		}
+		
+		return ok(Json.toJson(responseData));
+	}
 }
 
 

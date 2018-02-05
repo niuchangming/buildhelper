@@ -90,6 +90,7 @@ GET		/issue/reject/page				controllers.COSController.issueRejectPage(cosId: Long
 GET		/inspect/approve/page			controllers.COSController.inspectApprovePage(cosId: Long ?= 0)
 GET		/inspect/reject/page				controllers.COSController.inspectRejectPage(cosId: Long ?= 0)
 GET 		/preview/cos						controllers.COSController.previewCOS(cosId: Long ?= 0)
+POST 	/delete/cos/image				controllers.COSController.deleteCOSImage(uuid: String ?= "");
 
 
 GET 		/export/qp/summary				controllers.ExportController.exportQPByCompany()
