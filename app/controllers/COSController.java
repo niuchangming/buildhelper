@@ -25,6 +25,8 @@ import models.COS;
 import models.COSImage;
 import models.COSTerm;
 import models.Inspection;
+import models.ApproveSign;
+import models.Image;
 import models.Issue;
 import models.LetterHead;
 import models.Notification;
@@ -308,7 +310,7 @@ public class COSController extends Controller{
 			if (isLarge) {
 				imageStream = cosImage.download();
 			} else {
-				imageStream = cosImage.downloadThumbnail();
+				imageStream = cosImage.download();
 			}
 		} catch (NoResultException e) {
 			imageStream = application.get().classloader().getResourceAsStream(LetterHead.PLACEHOLDER);
@@ -694,6 +696,27 @@ public class COSController extends Controller{
 				imageStream = sign.download();
 			} else {
 				imageStream = sign.downloadThumbnail();
+			}
+		} catch (NoResultException e) {
+			imageStream = application.get().classloader().getResourceAsStream(Avatar.DEFAULT_AVATAR);
+		}
+		
+		return ok(imageStream);
+	}
+
+	@Transactional
+	public Result showApproveSignature(String uuid, boolean isLarge) {
+		TypedQuery<Image> query = jpaApi.em().createQuery("from Image sn where sn.uuid = :uuid", Image.class)
+				.setParameter("uuid", uuid);
+
+		InputStream imageStream = null;
+		try {
+			Image sign = query.getSingleResult();
+
+			if (isLarge) {
+				imageStream = sign.download();
+			} else {
+				imageStream = sign.download();
 			}
 		} catch (NoResultException e) {
 			imageStream = application.get().classloader().getResourceAsStream(Avatar.DEFAULT_AVATAR);
