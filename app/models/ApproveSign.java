@@ -61,6 +61,12 @@ public class ApproveSign extends Image{
 		InputStream stream = s3Object.getObjectContent();
 		return stream;
 	}
+
+	public InputStream download(){
+		S3Object s3Object = S3Plugin.amazonS3.getObject(new GetObjectRequest(S3Plugin.s3Bucket, this.uuid));
+		InputStream stream = s3Object.getObjectContent();
+		return stream;
+	}
 	
 	public void deleteThumbnail(){
 		S3Plugin.amazonS3.deleteObject(S3Plugin.s3Bucket, this.thumbnailUUID);

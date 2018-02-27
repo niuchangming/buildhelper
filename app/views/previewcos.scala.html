@@ -3,7 +3,11 @@
 
 @(account: Account, cos: COS)
 
-@sidemenu(account, 8) {
+@scripts = {
+	
+}
+
+@main(scripts, "Print") {
 	<link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/froala/font-awesome.min.css")">
 	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets//bootstrap-datetimepicker.min.css")">
 	<script src="@routes.Assets.versioned("javascripts/fabric/fabric.min.js")" type="text/javascript"></script>
@@ -16,11 +20,220 @@
 		});	
 	</script>
 	
-	<div class="dash-detail-header">
-		<p class="title">Preview COS</p>
+	@if(cos.project.isGondola){
+	<div style="max-width: 715px; margin-left: auto; margin-right: auto;">
+		<center><img src="@routes.Assets.versioned("images/ymw_letterhead.png")" style="max-width: 715px; max-height: 120px; "></center>
+		<hr>
+		<span>Our Ref No.: </span><span>@cos.serialNo</span>
 	</div>
-	<div class="cos-bg"> 
-		<div class="a4">
+	<div style="padding: 20px; max-width: 675px; margin-left: auto; margin-right: auto; font-size: 14px;">
+		<h4 style="text-align: center; margin-bottom: 20px;">CERTIFICATION OF SUPERVISION</h4>
+		<div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Project Title</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@cos.project.title</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Developer/Client</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@cos.project.clients(0).companyName</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Builder/Contractor</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@cos.project.builders(0).companyName</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Subject</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@for(j <- 0 until cos.subGrids.size){
+									@cos.subGrids(j).subject
+									@if(j < cos.subGrids.size - 1){
+										,
+									}
+								}</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Inspection Date</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@if(cos.inspections.size > 0){@cos.inspections(0).inspectDate}</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Gondola No.</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@cos.gondolaNo</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>L E Registration No.</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@cos.leRegistrationNo</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Distinctive No.</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@cos.distinctiveNo</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Max. Length</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@cos.gondolaMaxLength</span></p>
+				</div>
+			</div>
+			<div style="display: flex;">
+				<div style="width: 30%">
+					<p><b>Max. S.W.L</b></p>
+				</div>
+				<div style="width: 70%">
+					<p>: <span>@cos.gondolaMaxSWL</span></p>
+				</div>
+			</div>
 		</div>
+		<p style="text-align: justify; margin-top: 30px; margin-bottom: 80px;"><b>I</b>, <span>@if(cos.issues.size > 0){@cos.issues(0).issuedBy.user.name}</span>, <b>PE No.</b> <span>@if(cos.issues.size > 0){@cos.issues(0).issuedBy.user.peNo}</span>, hereby certify that the structural supporting the lifting equipment and tension of safety wire described in as above was examined by me and I confirmed that the stability of the structures (such as RC roof slab, beams, columns and parapet walls) are safe for the taking of gondola loads to carrying out the building works.</p>
+		<br>
+		<p>Yours truly,</p>
+		<div style="position:relative; display: inline-block; margin-left: 50px;">
+			<img style="width: 150px; height: 150px; margin-top: -20px; margin-bottom: -20px;" src="@routes.Assets.versioned("images/pe_stamp.svg")">
+			<div style="position: absolute; top: 56px; width: 100%;">
+				<p style="font-family:MyriadPro-Regular, Myriad Pro; font-size: 18px; color: #2b3990; width: 100%; text-align: center; text-transform: uppercase;">@if(cos.issues.size > 0){@cos.issues(0).issuedBy.user.name}</p>
+			</div>
+			<div style="position: absolute; top: 80px; width: 100%;">
+				<p style="font-family:MyriadPro-Regular, Myriad Pro; font-size: 18px; color: #2b3990; width: 100%; text-align: center;">@if(cos.issues.size > 0){@cos.issues(0).issuedBy.user.peNo}</p>
+			</div>
+			@if(cos.issues.size > 0){
+				<img style="background-size: cover;background-repeat: no-repeat;background-position: center;z-index: 100;position:absolute;width:150px;height:75px;top: -10px;left: 0;" src="@routes.COSController.showApproveSignature(cos.issues(0).approves(0).approveSign.uuid)" />
+			}
+		</div>
+		<div style="display: flex; text-align: center;">
+			<div style="float: left; width: 50%;">
+				<div style="float: left;">
+					<br>
+					<hr style="width: 200px; margin: 5px 0;">Professional Engineer
+					<br>(Signature and Stamp)
+				</div>
+			</div>
+			<div style="float: right; width: 50%;">
+				<div style="float: right;">
+					<span>@if(cos.issues.size > 0){@cos.issues(0).issueDate}</span>
+					<br><hr style="width: 200px; margin: 5px 0;">
+					<span>Date</span>
+				</div>
+			</div>
+		</div>
+
+	@if(cos.additionalImages.size > 0){
+		<h4 style="margin-top: 100px; text-align: center;">DRAWINGS/CALCULATIONS</h4>
+	}
+
+	@for(index <- 0 until cos.additionalImages.size){	
+		<div style="width: 635px;">
+			<img style="width: 100%; margin-bottom: 15px;" src="@routes.COSController.showCOSImage(cos.additionalImages(index).uuid)"/>
+		</div>
+	}
+
+
+
+	<div style="font-size: 14px; margin-top: 20px;">
+      <h4 style="text-align: center; margin-top: 100px;">GONDOLA INSPECTION CHECKLIST</h4>
+      <table style="width: 100%; text-align: center; page-break-inside: auto;">
+        <tr style="background-color: #555555; color: #ffffff;">
+          <th style="padding: 10px;">#</th>
+          <th style="padding: 10px;" colspan="2">COMPLIANCE CRITERIA</th>
+          <th style="padding: 10px;">YES/NO/NA</th>
+        </tr>
+        @for(index <- 0 until cos.cosTerms.size/3) {
+
+
+              <tr style="background-color: #f5f5f5;" id="@cos.cosTerms(index).term.id">
+                <td style="10px;">@(index + 1)</td>
+                <td style="text-align: justify;
+                  padding: 10px;" colspan="2">
+                @cos.cosTerms(index).term.subject
+                </td>
+                <td style="padding: 10px;">@if(cos.cosTerms(index).term.value == 1) {YES} @if(cos.cosTerms(index).term.value == 0) {NO} @if(cos.cosTerms(index).term.value == -1) {N/A}</td>
+              </tr>
+          @for(mult <- 0 until 3) {
+            @if(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks != null) {
+              @for(jdex <- 0 until cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks.size) {
+                <tr >
+                  <td> </td>
+                  <td colspan="3" class="text-left">
+                 Remark By @cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).author.user.name: @if(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).remark) {@cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).remark}
+                </td>
+                </tr>
+                @if(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages.size > 0) {
+                  @if(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages.size % 2 == 0) {
+                    @for(n <- 0 until cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages.size / 2) {
+                      <tr>
+                        <td> </td>
+                        <td>
+                          <img style="width: 250px; margin-right: 15px; margin-bottom: 15px;" src="@(routes.COSController.showCOSImage(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages(n).uuid))"></img>
+                        </td>
+                        <td>
+                          <img style="width: 250px; margin-right: 15px; margin-bottom: 15px;" src="@(routes.COSController.showCOSImage(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages(n * 2).uuid))"></img>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    }
+                  } else {
+                    @for(n <- 0 until cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages.size / 2) {
+                      <tr>
+                        <td> </td>
+                        <td >
+                          <img style="width: 250px; margin-right: 15px; margin-bottom: 15px;" src="@(routes.COSController.showCOSImage(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages(n).uuid))"></img>
+                        </td>
+                        <td >
+                          <img style="width: 250px; margin-right: 15px; margin-bottom: 15px;" src="@(routes.COSController.showCOSImage(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages(n * 2).uuid))"></img>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    }
+                    <tr>
+                      <td> </td>
+                      <td colspan="1">
+                        <img style="width: 250px; margin-right: 15px; margin-bottom: 15px;" src="@(routes.COSController.showCOSImage(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages(cos.cosTerms(index + mult * cos.cosTerms.size/3).remarks(jdex).cosImages.size - 1).uuid))"></img>
+                      </td>
+                      <td colspan="2"> </td>
+
+                    </tr>
+
+                  }
+
+                }
+              }
+            }
+          }
+        }
+      </table>
+    </div>
+
 	</div>
+		
+}
 }
