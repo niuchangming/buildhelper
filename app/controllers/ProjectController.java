@@ -145,10 +145,10 @@ public class ProjectController extends Controller{
 			responseData.code = 4000;
 			responseData.message = "You do not have permission.";
 		}else{
-			String qpSql = "SELECT * FROM account ac WHERE ac.deleted=0 AND ac.blocked=0 AND ac.active=1 AND ac.acc_type=3 AND ac.company_id = " + engineer.company.id;
+			String qpSql = "SELECT * FROM account ac WHERE ac.deleted=0 AND ac.blocked=0 AND ac.acc_type=3 AND ac.company_id = " + engineer.company.id;
 			List<Account> qpList = jpaApi.em().createNativeQuery(qpSql, Account.class).getResultList();
 			
-			String inspectorSql = "SELECT * FROM account ac WHERE ac.deleted=0 AND ac.blocked=0 AND ac.active=1 AND ac.acc_type=2 AND ac.company_id = " + engineer.company.id;
+			String inspectorSql = "SELECT * FROM account ac WHERE ac.deleted=0 AND ac.blocked=0 AND ac.acc_type=2 AND ac.company_id = " + engineer.company.id;
 			List<Account> inspectors = jpaApi.em().createNativeQuery(inspectorSql, Account.class).getResultList();
 			
 			Project project = null;
