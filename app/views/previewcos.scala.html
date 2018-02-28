@@ -316,31 +316,43 @@
 		}
 		</table>
 
-		<div style="position:relative; display: inline-block; margin-left: 50px;">
-			<img style="width: 150px; height: 150px; margin-bottom: -20px;" src="@routes.Assets.versioned("images/pe_stamp.svg")">
-			<div style="position: absolute; top: 76px; width: 100%;">
-				<p style="font-family:MyriadPro-Regular, Myriad Pro; font-size: 18px; color: #2b3990; width: 100%; text-align: center; text-transform: uppercase;">@if(cos.issues.size > 0){@cos.issues(0).issuedBy.user.name}</p>
+		<div style="display: flex">
+			<div style="float: left; width: 50%;">	
+				<div style="position:relative; display: inline-block;">
+					@if(cos.inspections.size > 0){
+						<img style="background-size: cover;background-repeat: no-repeat;background-position: center;z-index: 100;position:absolute;width:150px;height:75px;top: 60px;left: 0;" src="@routes.COSController.showApproveSignature(cos.inspections(0).approves(0).approveSign.uuid)" />
+					}
+				</div>
 			</div>
-			<div style="position: absolute; top: 100px; width: 100%;">
-				<p style="font-family:MyriadPro-Regular, Myriad Pro; font-size: 18px; color: #2b3990; width: 100%; text-align: center;">@if(cos.issues.size > 0){@cos.issues(0).issuedBy.user.peNo}</p>
+			<div style="float: right; width: 50%;">	
+				<div style="position:relative; display: inline-block;">
+					<img style="width: 150px; height: 150px; margin-bottom: -20px; margin-left: 130px;" src="@routes.Assets.versioned("images/pe_stamp.svg")">
+					<div style="position: absolute; top: 76px; width: 100%; margin-left: 65px;">
+						<p style="font-family:MyriadPro-Regular, Myriad Pro; font-size: 18px; color: #2b3990; width: 100%; text-align: center; text-transform: uppercase;">@if(cos.issues.size > 0){@cos.issues(0).issuedBy.user.name}</p>
+					</div>
+					<div style="position: absolute; top: 100px; width: 100%; margin-left: 65px;">
+						<p style="font-family:MyriadPro-Regular, Myriad Pro; font-size: 18px; color: #2b3990; width: 100%; text-align: center;">@if(cos.issues.size > 0){@cos.issues(0).issuedBy.user.peNo}</p>
+					</div>
+					@if(cos.issues.size > 0){
+						<img style="background-size: cover;background-repeat: no-repeat;background-position: center;z-index: 100;position:absolute;width:150px;height:75px;top: 10px; margin-left: 130px;" src="@routes.COSController.showApproveSignature(cos.issues(0).approves(0).approveSign.uuid)" />
+					}
+				</div>
 			</div>
-			@if(cos.issues.size > 0){
-				<img style="background-size: cover;background-repeat: no-repeat;background-position: center;z-index: 100;position:absolute;width:150px;height:75px;top: 10px;left: 0;" src="@routes.COSController.showApproveSignature(cos.issues(0).approves(0).approveSign.uuid)" />
-			}
 		</div>
+
 		<div style="display: flex; text-align: center;">
 			<div style="float: left; width: 50%;">
 				<div style="float: left;">
 					<br>
-					<hr style="width: 200px; margin: 5px 0;">Professional Engineer
-					<br>(Signature and Stamp)
+					<hr style="width: 200px; margin: 5px 0;">@if(cos.inspections.size > 0){@cos.inspections(0).inspectedBy.user.name}
+					<br>(Formwork Supervisor/RTO/RE/PE)
 				</div>
 			</div>
 			<div style="float: right; width: 50%;">
 				<div style="float: right;">
-					<span>@if(cos.issues.size > 0){@cos.issues(0).issueDate}</span>
-					<br><hr style="width: 200px; margin: 5px 0;">
-					<span>Date</span>
+					<br>
+					<hr style="width: 200px; margin: 5px 0;">Professional Engineer
+					<br>(Signature and Stamp)
 				</div>
 			</div>
 		</div>
