@@ -574,7 +574,7 @@
 			    	@for(index <- 0 until coses.size){
 					    <tr class="paginate">
 							<th>@((pageIndex-1) * Constants.ACCOUNT_PAGE_SIZE + index+1)</th>
-							<td>@coses(index).location</td>
+							<td>@if(coses(index).location != null){@coses(index).location}else{@coses(index).extraLocation}</td>
 							<td>
 								@for(j <- 0 until coses(index).subGrids.size){
 									@coses(index).subGrids(j).subject
